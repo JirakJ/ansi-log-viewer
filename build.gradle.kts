@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.2"
 }
 
-group = "com.example.ansilog"
+group = "com.jakubjirak.ansilog"
 version = "0.1.1"
 
 repositories { mavenCentral() }
