@@ -1,0 +1,33 @@
+<idea-plugin>
+  <id>com.jakubjirak.ansilog.viewer</id>
+  <name>ANSI Log Viewer</name>
+  <vendor email="support@jakubjirak.com" url="https://jakubjirak.com">Jakub Jirák</vendor>
+  <version>0.1.1</version>
+  <description><![CDATA[
+    Adds ANSI color rendering (SGR, 256-color, truecolor) to configured extensions (default *.log). Features:
+    <ul>
+      <li>Configurable file extensions</li>
+      <li>Folding ANSI escape sequences</li>
+      <li>Live update on document changes (debounced)</li>
+      <li>Supports basic, bright, 256-color and truecolor sequences</li>
+    </ul>
+  ]]></description>
+  <change-notes><![CDATA[
+    0.1.1:
+    <ul>
+      <li>Added settings panel for extensions</li>
+      <li>Live update highlighting</li>
+      <li>Added 256-color and truecolor support</li>
+    </ul>
+    0.1.0: Initial release.
+  ]]></change-notes>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationConfigurable displayName="ANSI Log Viewer" id="ansi.log.viewer" instance="com.jakubjirak.ansilog.AnsiLogSettingsConfigurable"/>
+  </extensions>
+
+  <projectListeners>
+    <listener class="com.jakubjirak.ansilog.AnsiLogFileOpenListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+  </projectListeners>
+</idea-plugin>

@@ -1,0 +1,5 @@
+\u001B[1;32mINFO\u001B[0m Starting service...
+\u001B[33mWARN\u001B[0m Low disk space
+\u001B[1;31mERROR\u001B[0m Failed to connect to DB
+256-color: \u001B[38;5;51mCyan-ish custom\u001B[0m
+Truecolor: \u001B[38;2;255;120;0mOrange gradient text\u001B[0m

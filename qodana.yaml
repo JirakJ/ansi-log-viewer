@@ -1,0 +1,8 @@
+version: "1.0"
+profile: qodana.recommended
+exclude:
+  - name: All
+    paths:
+      - build/
+      - .gradle/
+ide: IntelliJ IDEA Community
