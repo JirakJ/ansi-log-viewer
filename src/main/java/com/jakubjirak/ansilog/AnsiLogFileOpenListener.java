@@ -7,6 +7,8 @@ import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.util.Disposer;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
@@ -21,7 +23,6 @@ import java.util.regex.Pattern;
 public class AnsiLogFileOpenListener implements FileEditorManagerListener {
     private final Map<Document, Alarm> alarms = new WeakHashMap<>();
     private static final int DEBOUNCE_MS = 200;
-    private static final Pattern ESC_PATTERN = Pattern.compile("\u001B\\[[0-9;]*m");
 
     @Override
     public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
@@ -36,22 +37,54 @@ public class AnsiLogFileOpenListener implements FileEditorManagerListener {
         });
     }
 
-    private void applyAnsiHighlighting(Editor editor) {
+    public void applyAnsiHighlighting(Editor editor) {
         String text = editor.getDocument().getText();
         MarkupModel markup = editor.getMarkupModel();
         markup.removeAllHighlighters();
 
-        if (editor instanceof EditorEx) {
-            FoldingModel foldingModel = editor.getFoldingModel();
-            foldingModel.runBatchFoldingOperation(() -> {
-                Matcher m = ESC_PATTERN.matcher(text);
-                while (m.find()) {
-                    foldingModel.addFoldRegion(m.start(), m.end(), "");
-                }
-            });
+        boolean hideAnsiCodes = AnsiLogSettingsState.getInstance().isHideAnsiCodes();
+        
+        if (hideAnsiCodes) {
+            // Fold all ANSI codes to hide them completely
+            FoldingModel foldingModel = ((EditorEx) editor).getFoldingModel();
+            if (foldingModel != null) {
+                foldingModel.runBatchFoldingOperation(() -> {
+                    // Clear existing ANSI-related fold regions
+                    for (FoldRegion region : foldingModel.getAllFoldRegions()) {
+                        if (region != null && (region.getPlaceholderText().isEmpty() || region.getPlaceholderText().equals(""))) {
+                            foldingModel.removeFoldRegion(region);
+                        }
+                    }
+                    
+                    // Add new folds for all ANSI codes with invisible placeholder
+                    Matcher m = AnsiPatternUtil.ANSI_PATTERN.matcher(text);
+                    while (m.find()) {
+                        try {
+                            FoldRegion region = foldingModel.addFoldRegion(m.start(), m.end(), "");
+                            if (region != null) {
+                                region.setExpanded(false);
+                            }
+                        } catch (Exception e) {
+                            // Ignore fold creation errors
+                        }
+                    }
+                });
+            }
+        } else {
+            // When not hiding, remove all ANSI folding regions
+            FoldingModel foldingModel = ((EditorEx) editor).getFoldingModel();
+            if (foldingModel != null) {
+                foldingModel.runBatchFoldingOperation(() -> {
+                    for (FoldRegion region : foldingModel.getAllFoldRegions()) {
+                        if (region != null && region.getPlaceholderText().isEmpty()) {
+                            foldingModel.removeFoldRegion(region);
+                        }
+                    }
+                });
+            }
         }
 
-        Matcher matcher = ESC_PATTERN.matcher(text);
+        Matcher matcher = AnsiPatternUtil.ANSI_PATTERN.matcher(text);
         int lastIndex = 0;
         TextAttributes current = new TextAttributes();
         while (matcher.find()) {
@@ -170,16 +203,27 @@ public class AnsiLogFileOpenListener implements FileEditorManagerListener {
         if (alarms.containsKey(doc)) return;
         Alarm alarm = new Alarm(Alarm.ThreadToUse.SWING_THREAD);
         alarms.put(doc, alarm);
-        doc.addDocumentListener(new DocumentListener() {
+        
+        DocumentListener listener = new DocumentListener() {
             @Override
             public void documentChanged(@NotNull DocumentEvent event) {
-                if (doc.getTextLength() > 5_000_000) return; // skip very large files
+                if (doc.getTextLength() > 5_000_000) return;
                 alarm.cancelAllRequests();
                 alarm.addRequest(() -> {
                     if (editor.isDisposed()) return;
                     applyAnsiHighlighting(editor);
                 }, DEBOUNCE_MS);
             }
-        });
+        };
+        
+        Disposable disposable = new Disposable() {
+            @Override
+            public void dispose() {
+                // Cleanup handled by weak references and Alarm
+            }
+        };
+        
+        doc.addDocumentListener(listener, disposable);
+        Disposer.register(editor.getProject() != null ? editor.getProject() : (Disposable) () -> {}, disposable);
     }
 }

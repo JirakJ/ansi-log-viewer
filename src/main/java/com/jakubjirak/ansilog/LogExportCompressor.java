@@ -76,7 +76,7 @@ public class LogExportCompressor {
     }
     
     private static String stripAnsiCodes(@NotNull String content) {
-        return content.replaceAll("\u001B\\[[0-9;]*m", "");
+        return content.replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
     }
     
     private static String prependMetadata(@NotNull String content) {

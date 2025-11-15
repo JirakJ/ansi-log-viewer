@@ -4,15 +4,17 @@ plugins {
 }
 
 group = "com.jakubjirak.ansilog"
-version = "0.1.1"
+version = "2.3.0"
 
 repositories { mavenCentral() }
 
 intellij {
-    version.set("2024.2")
+    version.set("2025.2")
     type.set("IC")
     plugins.set(listOf())
 }
+
+tasks.buildSearchableOptions { enabled = false }
 
 // Marketplace metadata (configure publishPlugin task)
 tasks.publishPlugin {
@@ -20,15 +22,15 @@ tasks.publishPlugin {
 }
 
 tasks.patchPluginXml {
-    sinceBuild.set("242")
-    untilBuild.set("242.*")
+    sinceBuild.set("252")
+    untilBuild.set("")
 }
 
 tasks.withType<JavaCompile> { options.release.set(17) }
 
 // Plugin Verifier target IDEs
 tasks.runPluginVerifier {
-    ideVersions.set(listOf("2024.2", "2024.1", "2023.3"))
+    ideVersions.set(listOf("2025.2", "2024.2", "2024.1"))
 }
 
 

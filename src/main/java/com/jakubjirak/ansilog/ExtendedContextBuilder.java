@@ -49,7 +49,7 @@ public class ExtendedContextBuilder {
         context.append("SAMPLE_CONTENT:\n");
         int sampleCount = Math.min(20, lines.length);
         for (int i = 0; i < sampleCount; i++) {
-            String clean = lines[i].replaceAll("\u001B\\[[0-9;]*m", "");
+            String clean = lines[i].replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
             context.append(String.format("%d: %s\n", i + 1, clean.length() > 100 ? clean.substring(0, 100) + "..." : clean));
         }
         

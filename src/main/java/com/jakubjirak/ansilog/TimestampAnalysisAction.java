@@ -41,7 +41,7 @@ public class TimestampAnalysisAction extends AnAction {
                 
                 if (firstTime == null) {
                     firstTime = seconds;
-                    firstAndLastLines.add("START: " + time + " - " + line.replaceAll("\u001B\\[[0-9;]*m", ""));
+                    firstAndLastLines.add("START: " + time + " - " + line.replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", ""));
                 }
                 lastTime = seconds;
             }

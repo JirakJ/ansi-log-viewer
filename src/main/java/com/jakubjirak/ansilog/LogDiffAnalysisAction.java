@@ -4,9 +4,14 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
+
+import javax.swing.*;
 
 public class LogDiffAnalysisAction extends AnAction {
     @Override
@@ -25,14 +30,7 @@ public class LogDiffAnalysisAction extends AnAction {
             "Short lines vs Long lines"
         };
         
-        int choice = Messages.showChooseDialog(
-                e.getProject(),
-                "Select comparison type:",
-                "Log Diff Analysis",
-                Messages.getQuestionIcon(),
-                criteria,
-                criteria[0]
-        );
+        int choice = showChoiceDialog(e, "Select comparison type:", "Log Diff Analysis", criteria, 0);
         
         if (choice < 0) return;
         
@@ -108,5 +106,33 @@ public class LogDiffAnalysisAction extends AnAction {
     public void update(@NotNull AnActionEvent e) {
         Editor editor = e.getData(PlatformDataKeys.EDITOR);
         e.getPresentation().setEnabled(editor != null && !editor.getDocument().getText().isEmpty());
+    }
+
+    private int showChoiceDialog(AnActionEvent e, String message, String title, String[] options, int defaultIndex) {
+        JBList<String> list = new JBList<>(options);
+        list.setSelectedIndex(defaultIndex);
+        
+        DialogWrapper dialog = new DialogWrapper(e.getProject(), false) {
+            {
+                init();
+                setTitle(title);
+            }
+            
+            @Nullable
+            @Override
+            protected JComponent createCenterPanel() {
+                JPanel panel = new JPanel();
+                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                panel.add(new JLabel(message));
+                panel.add(Box.createVerticalStrut(10));
+                panel.add(new JScrollPane(list));
+                return panel;
+            }
+        };
+        
+        if (dialog.showAndGet()) {
+            return list.getSelectedIndex();
+        }
+        return -1;
     }
 }

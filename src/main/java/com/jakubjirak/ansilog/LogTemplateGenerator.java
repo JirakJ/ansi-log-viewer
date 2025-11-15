@@ -82,7 +82,7 @@ public class LogTemplateGenerator {
                 .replace("%thread%", Thread.currentThread().getName())
                 .replace("%logger%", "com.example.Logger")
                 .replace("%pid%", String.valueOf(ProcessHandle.current().pid()))
-                .replace("%tid%", String.valueOf(Thread.currentThread().getId()))
+                .replace("%tid%", String.valueOf(Thread.currentThread().hashCode()))
                 .replace("%image%", "app-container")
                 .replace("%address%", "192.168.1.1")
                 .replace("%query_id%", String.valueOf(UUID.randomUUID()))

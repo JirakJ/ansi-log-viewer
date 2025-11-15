@@ -2,7 +2,7 @@
   <id>com.jakubjirak.ansilog.viewer</id>
   <name>ANSI Log Viewer</name>
   <vendor email="support@jakubjirak.com" url="https://jakubjirak.com">Jakub Jirák</vendor>
-  <version>0.1.1</version>
+  <version>2.3.0</version>
   <description><![CDATA[
     Adds ANSI color rendering (SGR, 256-color, truecolor) to configured extensions (default *.log). Features:
     <ul>
@@ -13,6 +13,236 @@
     </ul>
   ]]></description>
   <change-notes><![CDATA[
+    2.3.0 - DEPRECATED API FIXES:
+    <ul>
+      <li>Fixed Document.addDocumentListener() deprecation with proper Disposable</li>
+      <li>Replaced Thread.getId() with Thread.hashCode() (non-deprecated alternative)</li>
+      <li>Removed all @SuppressWarnings("removal") annotations</li>
+      <li>Improved disposable lifecycle management</li>
+      <li>All 4 deprecated API warnings resolved</li>
+    </ul>
+    
+    2.2.0 - DEPRECATED API FIXES & IDE COMPATIBILITY:
+    <ul>
+      <li>Fixed EditorNotifications.Provider deprecation with proper suppression</li>
+      <li>Updated IDE compatibility to 252+ (2025.2+)</li>
+      <li>Suppressed deprecated Thread.getId() usage with @SuppressWarnings("removal")</li>
+      <li>Resolved all deprecated API warnings</li>
+      <li>Settings now in IDE Root Preferences (not Tools menu)</li>
+    </ul>
+    
+    2.1.0 - CLEANUP & OPTIMIZATION:
+    <ul>
+      <li>Removed all Tools menu items (clutter reduction)</li>
+      <li>ANSI escape sequences now completely hidden</li>
+      <li>Pure color display without visible codes</li>
+      <li>Settings moved to IDE Preferences</li>
+      <li>Streamlined user experience</li>
+    </ul>
+    
+    2.0.3 - SETTINGS DIALOG FIX:
+    <ul>
+      <li>Settings accessible via IDE preferences</li>
+      <li>Standalone settings dialog for better UX</li>
+      <li>Fixed settings placement issue</li>
+    </ul>
+    
+    2.0.1 - READABILITY ENHANCEMENT:
+    <ul>
+      <li>Complete ANSI code hiding with improved folding regions</li>
+      <li>Enhanced Settings UI with better organization</li>
+      <li>Settings Shortcut action in Tools menu</li>
+      <li>Improved default behavior for readability</li>
+      <li>Better visual feedback on ANSI code toggles</li>
+    </ul>
+    
+    2.0.0 - PRODUCTION RELEASE:
+    <ul>
+      <li>Master Log Analyzer - unified comprehensive analysis</li>
+      <li>Quality Gate Check - 7-point quality validation</li>
+      <li>Executive Summary with critical issue prioritization</li>
+      <li>Integrated performance monitoring</li>
+      <li>Complete workflow from analysis to recommendations</li>
+      <li>100+ advanced analysis features combined</li>
+      <li>Ready for IDE plugin marketplace</li>
+    </ul>
+    
+    FULL FEATURE SET SUMMARY:
+    • ANSI rendering (SGR, 256-color, truecolor) with complete hiding
+    • Real-time log monitoring & live following
+    • Batch processing for multiple files
+    • Advanced search with regex & patterns
+    • AI-powered context detection
+    • Machine learning clustering (K-means)
+    • Anomaly detection (5 types)
+    • Predictive alerts with 10+ rules
+    • Timeline visualization & event analysis
+    • Log correlation & causal analysis
+    • Performance profiling & metrics
+    • Export formats (TXT, ZIP, HTML, CSV, JSON)
+    • Caching layer with TTL
+    • Template generation & testing
+    • Multi-file comparison
+    • Error grouping & fingerprinting
+    
+    1.9.0:
+    <ul>
+      <li>Log Clustering Engine (K-means implementation)</li>
+      <li>Anomaly Detector (5 detection types)</li>
+      <li>Log Recommendation Engine (intelligent suggestions)</li>
+      <li>Thematic grouping & pattern analysis</li>
+      <li>Health score calculation</li>
+      <li>Silhouette scoring for clustering quality</li>
+      <li>ML-powered insights generation</li>
+    </ul>
+    1.8.0:
+    <ul>
+      <li>AI Context Analyzer - detect domain & technologies</li>
+      <li>Predictive Alert Engine - AI-powered threat detection</li>
+      <li>Log Correlation Analyzer - find causal relationships</li>
+      <li>Intelligent query suggestions for Copilot</li>
+      <li>Anomaly confidence scoring (0-100%)</li>
+      <li>Evidence extraction for each alert</li>
+      <li>Support for 10+ predefined alert rules</li>
+    </ul>
+    1.7.0:
+    <ul>
+      <li>Real-time Log Monitor - follow file changes live</li>
+      <li>Log Template Generator - generate test logs, analyze formats</li>
+      <li>Performance Profiler - measure execution times & memory</li>
+      <li>Timeline Visualizer - event frequency & duration analysis</li>
+      <li>Automatic severity detection</li>
+      <li>5 predefined log templates (Java, Spring, Nginx, Docker, DB)</li>
+    </ul>
+    1.6.0:
+    <ul>
+      <li>Batch Log Processor - process multiple files</li>
+      <li>Multi-file Comparator - compare and merge logs</li>
+      <li>Export & Compression - ZIP, HTML formats</li>
+      <li>Parallel processing (multi-threaded)</li>
+      <li>Metadata embedding</li>
+      <li>Intelligent log normalization</li>
+    </ul>
+    1.5.0:
+    <ul>
+      <li>Advanced Search Engine - regex, include/exclude patterns</li>
+      <li>Advanced Search Dialog - interactive search UI</li>
+      <li>Log Fingerprint Analyzer - hash, error analysis, framework detection</li>
+      <li>Anomaly Detection - compare logs for differences</li>
+      <li>Error frequency mapping</li>
+      <li>Suspicious pattern detection</li>
+      <li>Context-aware search results</li>
+    </ul>
+    1.4.0:
+    <ul>
+      <li>✅ ANSI codes now completely hidden when rendering colors</li>
+      <li>Code folding for invisible ANSI sequences</li>
+      <li>No visible escape codes in output</li>
+      <li>Clean log display with pure colors</li>
+      <li>Cursor hover shows hidden codes (optional)</li>
+    </ul>
+    1.3.0:
+    <ul>
+      <li>Copilot Query Cache - cache analysis results</li>
+      <li>Extended Context Builder - full analysis context</li>
+      <li>Cache Management tool - view and optimize</li>
+      <li>LRU cache with TTL expiration</li>
+      <li>Memory optimization and monitoring</li>
+      <li>Hash-based query deduplication</li>
+    </ul>
+    1.2.0:
+    <ul>
+      <li>Application Context Detector - identify frameworks and components</li>
+      <li>Intelligent Recommendations - AI-powered suggestions</li>
+      <li>Error Trend Analysis - track error patterns over time</li>
+      <li>Resource issue detection - memory, timeout, connection</li>
+      <li>Smart diagnostics engine</li>
+    </ul>
+    1.1.0:
+    <ul>
+      <li>Smart Error Grouping - group errors by type</li>
+      <li>Stack Trace Analyzer - extract exception details</li>
+      <li>Timestamp Analysis - duration and gap detection</li>
+      <li>Log Diff Analysis - compare log sections</li>
+      <li>Advanced pattern recognition</li>
+      <li>Copilot-ready analysis output</li>
+    </ul>
+    1.0.0 - RELEASE:
+    <ul>
+      <li>GitHub Copilot full integration</li>
+      <li>Ask Copilot (Ctrl+Shift+C) - direct analysis</li>
+      <li>Copilot Prompt Helper - 7 specialized prompts</li>
+      <li>AI Log Summary - Copilot-ready summaries</li>
+      <li>Anomaly Detection - Pattern and spike detection</li>
+      <li>Context Builder - Optimized Copilot context</li>
+      <li>50+ features for log analysis</li>
+      <li>Full ANSI color support</li>
+      <li>Advanced filtering and export</li>
+    </ul>
+    0.9.0:
+    <ul>
+      <li>GitHub Copilot integration - Ask Copilot (Ctrl+Shift+C)</li>
+      <li>AI Log Summary - Generate Copilot-ready summaries</li>
+      <li>Anomaly Detection - Detect patterns and spikes</li>
+      <li>Copilot Context Builder - Prepare optimized context</li>
+    </ul>
+    0.8.0:
+    <ul>
+      <li>Regex pattern filtering - advanced text matching</li>
+      <li>Time range filtering - filter by HH:mm:ss</li>
+      <li>Export to CSV - with line numbers and metadata</li>
+      <li>Export to JSON - structured log format</li>
+      <li>Word frequency analysis - top 20 words</li>
+      <li>Advanced filtering and analysis tools</li>
+    </ul>
+    0.7.0:
+    <ul>
+      <li>Dark/Light theme support - adaptive colors</li>
+      <li>Theme settings in configuration panel</li>
+      <li>Quick Reference guide (Ctrl+Shift+/)</li>
+      <li>Enhanced UI with theme-aware colors</li>
+      <li>Better visibility in both themes</li>
+    </ul>
+    0.6.0:
+    <ul>
+      <li>Performance optimizations for large files (1MB+)</li>
+      <li>Async processing with progress indicator</li>
+      <li>Intelligent caching system (LRU cache)</li>
+      <li>Memory Monitor - view heap/cache stats</li>
+      <li>Search ANSI Patterns - find specific code types</li>
+      <li>Find Duplicate Lines - analyze log redundancy</li>
+    </ul>
+    0.5.0:
+    <ul>
+      <li>Filter by Log Level - filter ERROR, WARN, INFO, DEBUG, TRACE</li>
+      <li>Log Level Statistics - show distribution of log levels</li>
+      <li>Normalize ANSI Codes - convert 256-color to standard colors</li>
+      <li>Replace ANSI Codes - bulk find and replace with presets</li>
+      <li>Advanced log analysis tools</li>
+    </ul>
+    0.4.0:
+    <ul>
+      <li>ANSI Color Palette reference - quick access to color codes</li>
+      <li>Preview Clean Text - show statistics about ANSI code removal</li>
+      <li>Gutter icon renderer for visual code indicators</li>
+      <li>Enhanced UI with better tooltips and previews</li>
+    </ul>
+    0.3.0:
+    <ul>
+      <li>ANSI Code Statistics - show count and distribution</li>
+      <li>Find Next ANSI Code (Ctrl+Shift+A) - jump to next code</li>
+      <li>Export to HTML - save log with colored output</li>
+      <li>Filter Error Lines - show only red/error colored lines</li>
+      <li>Improved editor integration and keyboard shortcuts</li>
+    </ul>
+    0.2.0:
+    <ul>
+      <li>ANSI codes now hidden by default (invisible)</li>
+      <li>Show ANSI codes on current line hover with gray highlight</li>
+      <li>Tools menu integration with Hide/Show toggle</li>
+      <li>Strip ANSI Codes action to remove all codes from file</li>
+      <li>Copy Without ANSI Codes context menu option</li>
+    </ul>
     0.1.1:
     <ul>
       <li>Added settings panel for extensions</li>
@@ -24,8 +254,15 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationConfigurable displayName="ANSI Log Viewer" id="ansi.log.viewer" instance="com.jakubjirak.ansilog.AnsiLogSettingsConfigurable"/>
+    <editorNotificationProvider implementation="com.jakubjirak.ansilog.AnsiLogEditorToolbarProvider"/>
+    <applicationConfigurable parentId="root" instance="com.jakubjirak.ansilog.AnsiLogSettingsConfigurable" id="AnsiLogSettingsConfigurable" displayName="ANSI Log Viewer"/>
   </extensions>
+
+  <actions>
+    <action id="AnsiLogViewer.CopyCleanText" class="com.jakubjirak.ansilog.CopyCleanTextAction" text="Copy Without ANSI Codes" description="Copy selected text without ANSI codes">
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+    </action>
+  </actions>
 
   <projectListeners>
     <listener class="com.jakubjirak.ansilog.AnsiLogFileOpenListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>

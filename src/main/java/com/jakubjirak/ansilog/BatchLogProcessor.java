@@ -92,7 +92,7 @@ public class BatchLogProcessor {
     
     private static String applyOperation(@NotNull String content, @NotNull String operation) {
         if (operation.equals("strip_ansi")) {
-            return content.replaceAll("\u001B\\[[0-9;]*m", "");
+            return content.replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
         } else if (operation.equals("normalize")) {
             return normalizeLogLines(content);
         } else if (operation.equals("deduplicate")) {
@@ -108,7 +108,7 @@ public class BatchLogProcessor {
         for (String line : content.split("\n")) {
             String normalized = line
                     .replaceAll("\\s+", " ")
-                    .replaceAll("\u001B\\[[0-9;]*m", "")
+                    .replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "")
                     .trim();
             if (!normalized.isEmpty()) {
                 sb.append(normalized).append("\n");

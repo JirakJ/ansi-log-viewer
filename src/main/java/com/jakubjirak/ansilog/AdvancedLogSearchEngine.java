@@ -170,6 +170,6 @@ public class AdvancedLogSearchEngine {
     }
     
     private static String removeAnsiCodes(String text) {
-        return text.replaceAll("\u001B\\[[0-9;]*m", "");
+        return text.replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
     }
 }

@@ -24,7 +24,7 @@ public class StackTraceAnalyzerAction extends AnAction {
         StringBuilder currentTrace = new StringBuilder();
         
         for (String line : lines) {
-            String clean = line.replaceAll("\u001B\\[[0-9;]*m", "");
+            String clean = line.replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
             
             if (clean.contains("at ") && clean.contains("(")) {
                 currentTrace.append(clean).append("\n");

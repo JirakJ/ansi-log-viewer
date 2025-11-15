@@ -22,7 +22,7 @@ public class SmartErrorGroupingAction extends AnAction {
         Map<String, List<Integer>> errorLineNumbers = new HashMap<>();
         
         for (int i = 0; i < lines.length; i++) {
-            String line = lines[i].replaceAll("\u001B\\[[0-9;]*m", "");
+            String line = lines[i].replaceAll("(?:\u001B|\\u001B)\\[[0-9;]*m", "");
             if (line.toUpperCase().contains("ERROR")) {
                 // Extract error type (first meaningful part after ERROR)
                 String errorKey = extractErrorType(line);

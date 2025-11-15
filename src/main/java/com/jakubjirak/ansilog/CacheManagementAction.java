@@ -2,8 +2,13 @@ package com.jakubjirak.ansilog;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 public class CacheManagementAction extends AnAction {
     @Override
@@ -37,14 +42,7 @@ public class CacheManagementAction extends AnAction {
         
         // Actions
         String[] actions = {"Clear All Caches", "Optimize Memory", "View Details"};
-        int choice = Messages.showChooseDialog(
-                e.getProject(),
-                status.toString(),
-                "Cache Management",
-                Messages.getQuestionIcon(),
-                actions,
-                actions[0]
-        );
+        int choice = showChoiceDialog(e, status.toString(), "Cache Management", actions, 0);
         
         switch(choice) {
             case 0 -> {
@@ -89,5 +87,33 @@ public class CacheManagementAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         e.getPresentation().setEnabled(true);
+    }
+
+    private int showChoiceDialog(AnActionEvent e, String message, String title, String[] options, int defaultIndex) {
+        JBList<String> list = new JBList<>(options);
+        list.setSelectedIndex(defaultIndex);
+        
+        DialogWrapper dialog = new DialogWrapper(e.getProject(), false) {
+            {
+                init();
+                setTitle(title);
+            }
+            
+            @Nullable
+            @Override
+            protected JComponent createCenterPanel() {
+                JPanel panel = new JPanel();
+                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                panel.add(new JLabel(message));
+                panel.add(Box.createVerticalStrut(10));
+                panel.add(new JScrollPane(list));
+                return panel;
+            }
+        };
+        
+        if (dialog.showAndGet()) {
+            return list.getSelectedIndex();
+        }
+        return -1;
     }
 }

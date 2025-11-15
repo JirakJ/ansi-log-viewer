@@ -37,7 +37,7 @@ public class LogFingerprintAnalyzer {
         Map<String, Integer> errorMap = new HashMap<>();
         for (String line : lines) {
             if (line.contains("ERROR") || line.contains("Exception")) {
-                String cleanLine = line.replaceAll("\u001B\\[[0-9;]*m", "");
+                String cleanLine = line.replaceAll("(?:\\u001B|\\\\u001B)\\[[0-9;]*m", "");
                 String error = extractErrorType(cleanLine);
                 errorMap.put(error, errorMap.getOrDefault(error, 0) + 1);
             }
@@ -170,6 +170,6 @@ public class LogFingerprintAnalyzer {
     }
     
     private static String cleanLine(String line) {
-        return line.replaceAll("\u001B\\[[0-9;]*m", "").trim();
+        return line.replaceAll("(?:\\u001B|\\\\u001B)\\[[0-9;]*m", "").trim();
     }
 }
